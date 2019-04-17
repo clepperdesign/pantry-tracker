@@ -2,10 +2,11 @@
 from datetime import date, timedelta, datetime
 #custom class
 class Grocery():
-	def __init__(self,buydate,name,price=0):
+	def __init__(self,buydate,name,price=0,usedate=None):
 		self.buydate = buydate
 		self.name = name
-		self.price = price		
+		self.price = price
+		self.usedate = usedate
 importList = []
 #import from file as lists, to a list
 with open('pantry.txt','r') as imp:
@@ -19,16 +20,57 @@ year = '00'
 def getmonth():
         global month
         month = str(input('Input month as mm\n'))
+        if month.isdigit():
+                if 0 < int(month) < 13:
+                        if len(month) == 1:
+                                month = '0'+month
+                                print(month)
+                        print('valid')
+                else:
+                        print('invalid input')
+                        getmonth()
+        else:
+                print('invalid input')
+                getmonth()
 def getday():
         global day
         day = str(input('Input day as dd\n'))
+        if day.isdigit():
+                if month in ['01','03','05','07','08','10','12'] and 0 < int(day) < 32:
+                        pass
+                elif month in ['04','06','09','11'] and 0 < int(day) < 30:
+                        pass
+                elif month == '02' and 0 < int(day) < 29: #leap years, man
+                        pass
+                else:
+                        print('invalid input')
+                        getday()
+                if len(day) == 1:
+                        day = '0'+day
+                        print(day)
+                print('valid')
+        else:
+                print('invalid input')
+                getday()
 def getyear():
         global year
         year = str(input('Input year as yy\n'))
-
+        if year.isdigit():
+                if 0 <= int(year) < 100:
+                        if len(year) == 1:
+                                year = '0'+year
+                                print(year)
+                        print('valid')
+                else:
+                        print('invalid input')
+                        getyear()                         
+        else:
+                print('invalid input')
+                getyear()
 #begin Item adding program        
 def addItem():
         today = date.today().strftime('%m-%d-%y')
+        print(today)
         toadd = str.lower(input('Add item from purchase? y/n \n'))
         newitem = []
         if toadd == 'y' or toadd == 'yes':
@@ -44,6 +86,7 @@ def addItem():
                                 newdate = month +'-'+day+'-'+year
                                 print(newdate)
                                 newitem.append(newdate)
+                                print(datetime.strptime(newdate,'%m-%d-%y')) #testing
                         getdate()
                         itemask = str.lower(input('Enter item name. \n'))
                         newitem.append(itemask)
