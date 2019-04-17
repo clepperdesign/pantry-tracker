@@ -13,10 +13,21 @@ with open('pantry.txt','r') as imp:
         for line in imp:
                 importList.append(eval((line)))
 pantryList = [Grocery(*x) for x in importList] #found this on stackexchange https://stackoverflow.com/questions/19307169/how-to-assign-a-class-object-to-a-item-in-a-list-python
+#update pantryList
+def refreshPantry():
+        global pantryList
+        pantryList = [Grocery(*x) for x in importList]
+        print(pantryList)
+def updatedoc():
+        f = open('pantry.txt', 'w')
+        for item in importList:
+                f.write(str(item)+'\n') #allows dictionaries to be written to file properly
+        f.close()
 #set alternate dates
 month = '00'
 day = '00'
 year = '00'
+today = date.today().strftime('%m-%d-%y')
 def getmonth():
         global month
         month = str(input('Input month as mm\n'))
@@ -69,8 +80,6 @@ def getyear():
                 getyear()
 #begin Item adding program        
 def addItem():
-        today = date.today().strftime('%m-%d-%y')
-        print(today)
         toadd = str.lower(input('Add item from purchase? y/n \n'))
         newitem = []
         if toadd == 'y' or toadd == 'yes':
@@ -78,6 +87,13 @@ def addItem():
                 if dateask == 'y' or dateask == 'yes':
                         dateassign = today
                         newitem.append(dateassign)
+                        itemask = str.lower(input('Enter item name. \n'))
+                        newitem.append(itemask)
+                        try:
+                                priceask = int(input('Enter item price. \n'))
+                                newitem.append(priceask)
+                        except:
+                                print('Invalid price entered. \n')
                 else:
                         def getdate():
                                 getmonth()
@@ -97,21 +113,48 @@ def addItem():
                                 print('Invalid price entered. \n')
         else:
                 print('bye')
-
         print(newitem)
         importList.append(newitem)
-        print(importList)
-        print(pantryList)
-        def updatelist():
-                f = open('pantry.txt', 'w')
-                for item in importList:
-                        f.write(str(item)+'\n') #allows dictionaries to be written to file properly
-                f.close()
-        updatelist()
-addItem()
+        updatedoc()
+#addItem()
+
+#add usedate to existing item
+def addUsedate():
+        doRun = str.lower(input('Add final use date to pantry item? Y/N \n'))
+        if doRun == 'y' or doRun == 'yes':
+                def updater():
+                        for item in importList:
+                                print(item)
+                        whichUpd = str.lower(input('Please choose one item to update.\n'))
+                        print(whichUpd)
+                        for item in importList:
+                                for attribute in item:
+                                        if whichUpd == attribute:
+                                                if len(item)>3:
+                                                        print('Item already has usedate: ' + item[3]) #future project: remove items with usedate to add fresh item, and/or add multiple of item to compare usedates (more advanced database stuff?)
+                                                        updater()
+                                                else:
+                                                        dateget = str.lower(input('Was use date today? \n'))
+                                                        if dateget == 'y' or dateget == 'yes':
+                                                                item.append(today)
+                                                                print(item)
+                                                        else:                              
+                                                                getmonth()
+                                                                getday()
+                                                                getyear()
+                                                                usedate = month +'-'+day+'-'+year
+                                                                print(usedate)
+                                                                item.append(usedate)
+                                                                print(item)
+                updater()
+                updatedoc()
+        else:
+                print('bye')                                        
+addUsedate()                                   
+                                        
+                                
 
 #once items are added with datetimes, add functions for value
-        # update class to have usedate attribute
         # find days between buydate and usedate
         # divide item price by days between purchase and final use to calculate value
         
@@ -121,7 +164,7 @@ todaycalc = datetime.strptime(today, '%m-%d-%y')
 oneday = timedelta(days=1)
 
 pantry0date = datetime.strptime(pantryList[0].buydate, '%m-%d-%y')
-print(pantry0date)
-print(pantry0date - oneday)
+#print(pantry0date)
+#print(pantry0date - oneday)
 
 #print(pantryList[0].name,pantryList[0].buydate)
