@@ -38,7 +38,7 @@ def getday():
         if day.isdigit():
                 if month in ['01','03','05','07','08','10','12'] and 0 < int(day) < 32:
                         pass
-                elif month in ['04','06','09','11'] and 0 < int(day) < 30:
+                elif month in ['04','06','09','11'] and 0 < int(day) < 31:
                         pass
                 elif month == '02' and 0 < int(day) < 29: #leap years, man
                         pass
