@@ -115,8 +115,10 @@ def addItem():
                 print('bye')
         print(newitem)
         importList.append(newitem)
+        refreshPantry()
         updatedoc()
-#addItem()
+addItem()
+
 
 #add usedate to existing item
 def addUsedate():
@@ -124,7 +126,7 @@ def addUsedate():
         if doRun == 'y' or doRun == 'yes':
                 def updater():
                         for item in importList:
-                                print(item)
+                                print(item[1])
                         whichUpd = str.lower(input('Please choose one item to update.\n'))
                         print(whichUpd)
                         for item in importList:
@@ -148,14 +150,41 @@ def addUsedate():
                                                                 print(item)
                 updater()
                 updatedoc()
+                refreshPantry()
         else:
                 print('bye')                                        
-addUsedate()                                   
-                                        
-                                
+addUsedate()                                                                      
+def daysLasted():
+        doRun = str.lower(input('See how long an item lasted? Y/N \n'))
+        if doRun == 'y' or doRun == 'yes':
+                def runIt():
+                        for item in pantryList:
+                                if item.usedate != None:
+                                        print(item.name)
+                                else:
+                                        pass
+                        itemSel = str.lower(input('Select an item.\n'))
+                        for item in pantryList:
+                                if itemSel == item.name:
+                                        initdate = datetime.strptime(item.buydate,'%m-%d-%y')
+                                        usedate = datetime.strptime(item.usedate,'%m-%d-%y')
+                                        dayslength = usedate - initdate
+                                        print(dayslength)
+                                else:
+                                        pass
+                runIt()
+                def rerun():
+                        doAgain = str.lower(input("Investigate another item? Y/N \n"))
+                        if doAgain == 'yes' or doAgain == 'y':
+                                daysLasted()
+                        else:
+                                print('bye')
+                rerun()
+        else:
+                print('bye')
+daysLasted()
 
 #once items are added with datetimes, add functions for value
-        # find days between buydate and usedate
         # divide item price by days between purchase and final use to calculate value
         
 #testing
