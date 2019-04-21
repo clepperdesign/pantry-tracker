@@ -1,6 +1,5 @@
-## dicts are grocery items, keys are name, cost, store, price, date of purchase, and date of final use(eaten/used for last time); still working on last one
+## dicts are grocery items, keys are name, cost, store, price, date of purchase, and date of final use(eaten/used for last time)
 from datetime import date, timedelta, datetime
-#custom class
 class Grocery():
 	def __init__(self,buydate,name,price=0,usedate=None):
 		self.buydate = buydate
@@ -17,7 +16,7 @@ pantryList = [Grocery(*x) for x in importList] #found this on stackexchange http
 def refreshPantry():
         global pantryList
         pantryList = [Grocery(*x) for x in importList]
-        print(pantryList)
+#update 'database'
 def updatedoc():
         f = open('pantry.txt', 'w')
         for item in importList:
@@ -111,15 +110,13 @@ def addItem():
                                 newitem.append(priceask)
                         except:
                                 print('Invalid price entered. \n')
+                print(newitem)
+                importList.append(newitem)
+                refreshPantry()
+                updatedoc()
         else:
                 print('bye')
-        print(newitem)
-        importList.append(newitem)
-        refreshPantry()
-        updatedoc()
 addItem()
-
-
 #add usedate to existing item
 def addUsedate():
         doRun = str.lower(input('Add final use date to pantry item? Y/N \n'))
@@ -169,31 +166,50 @@ def daysLasted():
                                         initdate = datetime.strptime(item.buydate,'%m-%d-%y')
                                         usedate = datetime.strptime(item.usedate,'%m-%d-%y')
                                         dayslength = usedate - initdate
-                                        print(dayslength)
+                                        daysuse = int(str(dayslength).strip('days, 0:00:00'))
+                                        print('Item lasted ' + str(daysuse) + ' days.')
                                 else:
                                         pass
+                        def rerun():
+                                doAgain = str.lower(input("Investigate another item? Y/N \n"))
+                                if doAgain == 'yes' or doAgain == 'y':
+                                        runIt()
+                                else:
+                                        print('bye')
+                        rerun()
                 runIt()
-                def rerun():
-                        doAgain = str.lower(input("Investigate another item? Y/N \n"))
-                        if doAgain == 'yes' or doAgain == 'y':
-                                daysLasted()
-                        else:
-                                print('bye')
-                rerun()
         else:
                 print('bye')
 daysLasted()
+def itemValue():
+        doRun = str.lower(input('See value of a used item? Y/N \n'))
+        if doRun == 'y' or doRun == 'yes':
+                def runIt():
+                        for item in pantryList:
+                                if item.usedate != None:
+                                        print(item.name)
+                                else:
+                                        pass
+                        itemSel = str.lower(input('Select an item.\n'))
+                        for item in pantryList:
+                                if itemSel == item.name:
+                                        initdate = datetime.strptime(item.buydate,'%m-%d-%y')
+                                        usedate = datetime.strptime(item.usedate,'%m-%d-%y')
+                                        dayslength = usedate - initdate
+                                        daysuse = int(str(dayslength).strip('days, 0:00:00'))
+                                        value = int(item.price / daysuse)
+                                        print('Item lasted ' + str(daysuse) + ' days and cost $'+ str(value) + ' per day.')
+                                else:
+                                        pass
+                        def rerun():
+                                doAgain = str.lower(input("See value of another item? Y/N \n"))
+                                if doAgain == 'yes' or doAgain == 'y':
+                                        runIt()
+                                else:
+                                        print('bye')
+                        rerun()
+                runIt()
 
-#once items are added with datetimes, add functions for value
-        # divide item price by days between purchase and final use to calculate value
-        
-#testing
-today = date.today().strftime('%m-%d-%y')
-todaycalc = datetime.strptime(today, '%m-%d-%y')
-oneday = timedelta(days=1)
-
-pantry0date = datetime.strptime(pantryList[0].buydate, '%m-%d-%y')
-#print(pantry0date)
-#print(pantry0date - oneday)
-
-#print(pantryList[0].name,pantryList[0].buydate)
+        else:
+                print('bye')
+itemValue()
