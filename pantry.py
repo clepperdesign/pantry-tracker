@@ -77,139 +77,142 @@ def getyear():
         else:
                 print('invalid input')
                 getyear()
-#begin Item adding program        
 def addItem():
-        toadd = str.lower(input('Add item from purchase? y/n \n'))
         newitem = []
-        if toadd == 'y' or toadd == 'yes':
-                dateask = str.lower(input('Item purchased today? y/n \n'))
-                if dateask == 'y' or dateask == 'yes':
-                        dateassign = today
-                        newitem.append(dateassign)
-                        itemask = str.lower(input('Enter item name. \n'))
-                        newitem.append(itemask)
-                        try:
-                                priceask = int(input('Enter item price. \n'))
-                                newitem.append(priceask)
-                        except:
-                                print('Invalid price entered. \n')
-                else:
-                        def getdate():
-                                getmonth()
-                                getday()
-                                getyear()
-                                newdate = month +'-'+day+'-'+year
-                                print(newdate)
-                                newitem.append(newdate)
-                                print(datetime.strptime(newdate,'%m-%d-%y')) #testing
-                        getdate()
-                        itemask = str.lower(input('Enter item name. \n'))
-                        newitem.append(itemask)
-                        try:
-                                priceask = int(input('Enter item price. \n'))
-                                newitem.append(priceask)
-                        except:
-                                print('Invalid price entered. \n')
-                print(newitem)
-                importList.append(newitem)
-                refreshPantry()
-                updatedoc()
+        dateask = str.lower(input('Item purchased today? y/n \n'))
+        if dateask == 'y' or dateask == 'yes':
+                dateassign = today
+                newitem.append(dateassign)
+                itemask = str.lower(input('Enter item name. \n'))
+                newitem.append(itemask)
+                try:
+                        priceask = int(input('Enter item price. \n'))
+                        newitem.append(priceask)
+                except:
+                        print('Invalid price entered. \n')
         else:
-                print('bye')
-addItem()
-#add usedate to existing item
+                def getdate():
+                        getmonth()
+                        getday()
+                        getyear()
+                        newdate = month +'-'+day+'-'+year
+                        print(newdate)
+                        newitem.append(newdate)
+                getdate()
+                itemask = str.lower(input('Enter item name. \n'))
+                newitem.append(itemask)
+                try:
+                        priceask = int(input('Enter item price. \n'))
+                        newitem.append(priceask)
+                except:
+                        print('Invalid price entered. \n')
+        print(newitem)
+        importList.append(newitem)
+        refreshPantry()
+        updatedoc()
 def addUsedate():
-        doRun = str.lower(input('Add final use date to pantry item? Y/N \n'))
-        if doRun == 'y' or doRun == 'yes':
-                def updater():
-                        for item in importList:
-                                print(item[1])
-                        whichUpd = str.lower(input('Please choose one item to update.\n'))
-                        print(whichUpd)
-                        for item in importList:
-                                for attribute in item:
-                                        if whichUpd == attribute:
-                                                if len(item)>3:
-                                                        print('Item already has usedate: ' + item[3]) #future project: remove items with usedate to add fresh item, and/or add multiple of item to compare usedates (more advanced database stuff?)
-                                                        updater()
-                                                else:
-                                                        dateget = str.lower(input('Was use date today? \n'))
-                                                        if dateget == 'y' or dateget == 'yes':
-                                                                item.append(today)
-                                                                print(item)
-                                                        else:                              
-                                                                getmonth()
-                                                                getday()
-                                                                getyear()
-                                                                usedate = month +'-'+day+'-'+year
-                                                                print(usedate)
-                                                                item.append(usedate)
-                                                                print(item)
-                updater()
-                updatedoc()
-                refreshPantry()
-        else:
-                print('bye')                                        
-addUsedate()                                                                      
+        def updater():
+                for item in importList:
+                        print(item[1])
+                whichUpd = str.lower(input('Please choose one item above to update with a final usedate.\n'))
+                for item in importList:
+                        for attribute in item:
+                                if whichUpd == attribute:
+                                        if len(item)>3:
+                                                print('Item already has usedate: ' + item[3]) #future project: remove items with usedate to add fresh item, and/or add multiple of item to compare usedates (more advanced database stuff?)
+                                                updater()
+                                        else:
+                                                dateget = str.lower(input('Was use date today? \n'))
+                                                if dateget == 'y' or dateget == 'yes':
+                                                        item.append(today)
+                                                        print(item)
+                                                else:                              
+                                                        getmonth()
+                                                        getday()
+                                                        getyear()
+                                                        usedate = month +'-'+day+'-'+year
+                                                        print(usedate)
+                                                        item.append(usedate)
+                                                        print(item)
+        updater()
+        updatedoc()
+        refreshPantry()                                                                                                          
 def daysLasted():
-        doRun = str.lower(input('See how long an item lasted? Y/N \n'))
-        if doRun == 'y' or doRun == 'yes':
-                def runIt():
-                        for item in pantryList:
-                                if item.usedate != None:
-                                        print(item.name)
-                                else:
-                                        pass
-                        itemSel = str.lower(input('Select an item.\n'))
-                        for item in pantryList:
-                                if itemSel == item.name:
-                                        initdate = datetime.strptime(item.buydate,'%m-%d-%y')
-                                        usedate = datetime.strptime(item.usedate,'%m-%d-%y')
-                                        dayslength = usedate - initdate
-                                        daysuse = int(str(dayslength).strip('days, 0:00:00'))
-                                        print('Item lasted ' + str(daysuse) + ' days.')
-                                else:
-                                        pass
-                        def rerun():
-                                doAgain = str.lower(input("Investigate another item? Y/N \n"))
-                                if doAgain == 'yes' or doAgain == 'y':
-                                        runIt()
-                                else:
-                                        print('bye')
-                        rerun()
-                runIt()
-        else:
-                print('bye')
-daysLasted()
+        def runIt():
+                for item in pantryList:
+                        if item.usedate != None:
+                                print(item.name)
+                        else:
+                                pass
+                itemSel = str.lower(input('Select an item.\n'))
+                for item in pantryList:
+                        if itemSel == item.name:
+                                initdate = datetime.strptime(item.buydate,'%m-%d-%y')
+                                usedate = datetime.strptime(item.usedate,'%m-%d-%y')
+                                dayslength = str((usedate - initdate)).strip(' days,0:00:00')
+                                if dayslength =='':
+                                        dayslength='1'
+                                print('Item lasted ' + dayslength + ' days.')
+                        else:
+                                pass
+                def rerun():
+                        doAgain = str.lower(input("Investigate another item? Y/N \n"))
+                        if doAgain == 'yes' or doAgain == 'y':
+                                runIt()
+                        else:
+                                print('bye')
+                rerun()
+        runIt()
 def itemValue():
-        doRun = str.lower(input('See value of a used item? Y/N \n'))
-        if doRun == 'y' or doRun == 'yes':
-                def runIt():
-                        for item in pantryList:
-                                if item.usedate != None:
-                                        print(item.name)
-                                else:
-                                        pass
-                        itemSel = str.lower(input('Select an item.\n'))
-                        for item in pantryList:
-                                if itemSel == item.name:
-                                        initdate = datetime.strptime(item.buydate,'%m-%d-%y')
-                                        usedate = datetime.strptime(item.usedate,'%m-%d-%y')
-                                        dayslength = usedate - initdate
-                                        daysuse = int(str(dayslength).strip('days, 0:00:00'))
-                                        value = int(item.price / daysuse)
-                                        print('Item lasted ' + str(daysuse) + ' days and cost $'+ str(value) + ' per day.')
-                                else:
-                                        pass
-                        def rerun():
-                                doAgain = str.lower(input("See value of another item? Y/N \n"))
-                                if doAgain == 'yes' or doAgain == 'y':
-                                        runIt()
-                                else:
-                                        print('bye')
-                        rerun()
-                runIt()
-
-        else:
+        def runIt():
+                for item in pantryList:
+                        if item.usedate != None:
+                                print(item.name)
+                        else:
+                                pass
+                itemSel = str.lower(input('Select an item from the list above.\n'))
+                for item in pantryList:
+                        if itemSel == item.name:
+                                initdate = datetime.strptime(item.buydate,'%m-%d-%y')
+                                usedate = datetime.strptime(item.usedate,'%m-%d-%y')
+                                dayslength = str((usedate - initdate)).strip(' days,0:00:00')
+                                if dayslength == '':
+                                        dayslength='1'
+                                value = int(item.price / int(dayslength))
+                                print('Item lasted ' + dayslength + ' days and cost $'+ str(value) + ' per day.')
+                        else:
+                                pass
+                def rerun():
+                        doAgain = str.lower(input("See value of another item? Y/N \n"))
+                        if doAgain == 'yes' or doAgain == 'y':
+                                runIt()
+                        else:
+                                print('bye')
+                rerun()
+        runIt()
+def runAll():
+        def rerun():
+                doAgain = str.lower(input('Perform another function? Y/N\n'))
+                if doAgain == 'yes' or doAgain =='y':
+                        runAll()
+                else:
+                        print('bye')
+        whichdo = str.lower(input('Select a function to run: [Add New Item (A)] [Add Use Date(U)] [View Item Use Length (L)] [View Item Value(V)] [Exit(E)]\n'))
+        if whichdo == 'a':
+                addItem()
+                rerun()
+        elif whichdo == 'u':
+                addUsedate()
+                rerun()
+        elif whichdo == 'l':
+                daysLasted()
+                rerun()
+        elif whichdo == 'v':
+                itemValue()
+                rerun()
+        elif whichdo == 'e':
                 print('bye')
-itemValue()
+        else:
+                print('Invalid input')
+                rerun()
+runAll()
